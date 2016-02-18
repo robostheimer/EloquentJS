@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app id="ng-app">
+
+	<head>
+
+		<title>Let's do this</title>
+		<style>
+			body {
+				margin: 0
+			}
+			.overlay {
+				width: 100%;
+				position: fixed;
+				height: 100%;
+				box-sizing: border-box;
+				background-size: cover;
+				background-color: gray;
+				border: 5px solid red;
+				z-index: -1;
+				background-position: center;
+			}
+			main {
+				height: 300px;
+				margin: 20px;
+				width: 400px;
+				  display: -webkit-flex;
+				  display:         flex;
+				  -webkit-align-items: center;
+				          align-items: center;
+				  -webkit-justify-content: center;
+				          justify-content: center;
+}
+			}
+			.text_inside_overlay {
+
+				width: 300px;
+				height: 300px;
+				overflow: auto;
+				overflow: scroll;
+				background: purple;
+				position: absolute;
+				top: 0%;
+				left: 50px;
+				right: 50px;
+				overflow: hidden;
+				padding: 20px;
+				box-sizing: border-box;
+			}
+
+		</style>
+
+	</head>
+	<body>
+		<section  id="main" class="overlay"></section>
+		<main>
+			<section class="text_inside_overlay">
+				<div style="width:300px; border:1px solid orange; background:yellow" >
+					<button id="clickme">
+						Click Me
+
+					</button>
+				</div>
+				<div style="width:300px; border:1px solid blue; background:pink">
+					<button id="clickmetoo">
+						Click Me
+
+					</button>
+				</div>
+
+				<div style="width:300px; border:1px solid blue; background:orange"  id="bubbler" class="item">
+					<ul id="ul"  class="item">
+						<li id="li_1"  class="item">
+							<button id="b_1" class="item">
+								Click Me
+
+							</button>
+						</li>
+						<li id="li_2"  class="item">
+							<button id="b_2"  class="item">
+								Click Me
+
+							</button>
+						</li>
+						<li id="li_3">
+							<button id="b_3"  class="item">
+								Click Me
+
+							</button>
+						</li>
+						<li id="li_4" class="item">
+							<button id="b_4" class="item">
+								Click Me
+
+							</button>
+						</li>
+					</ul>
+				</div>
+
+				<div style="width:300px; border:1px solid blue; background:orange"  id="bubbles" >
+					<ul id="ul_bubbles" >
+						<li id="l_bubbles">
+							<button id="b_bubbles" >
+								Click Me
+
+							</button>
+							<button id="b2_bubbles" >
+								Click Me
+
+							</button>
+							<button id="b3_bubbles" >
+								Click Me
+
+							</button>
+						</li>
+				</div>
+			</section>
+		</main>
+		<!--<form>
+		<input type="search" placeholder="Frontend Tech" id="search_tech" style="color:red" onkeyup="searchQuery()"/>
+		</form>	<div id="suggestion" style="color:blue">
+
+		</div>-->
+
+		<script src="/Sidewire/bower_components/jquery/src/jquery.js"></script>
+		<script src="/Sidewire/js/prototypes.js"></script>
+		<script src="/Sidewire/bower_components/jquery/dist/jquery.min.js"></script>
+	
+		<script>
+			var form = elt('form');
+			var input = elt('input', [{
+				placeholder : 'Search Frontend Tech'
+			}, {
+				type : 'search'
+			}, {
+				id : 'search_tech'
+			}, {
+				onkeyup : 'searchQuery()',
+				value : ''
+			}, {
+				results : 5
+			}]);
+			var suggestions = elt('div', [{
+				style : 'color:blue'
+			}, {
+				id : 'suggestion'
+			}]);
+			form.appendChild(input);
+			document.querySelector('.overlay').appendChild(form);
+			document.querySelector('.overlay').appendChild(suggestions)
+			var frontend_tech = [{
+				'type' : 'AngularJS'
+			}, {
+				'type' : 'CSS'
+			}, {
+				'type' : 'HTML'
+			}, {
+				'type' : 'PHP'
+			}, {
+				'type' : 'Javascript'
+			}, {
+				'type' : 'jQuery'
+			}, {
+				'type' : 'SASS'
+			}, {
+				'type' : 'CSS3'
+			}, {
+				'type' : 'HTML5'
+			}, {
+				'type' : 'ActionScript'
+			}, {
+				'type' : 'CoffeeScript'
+			}];
+			
+			function searchQuery() {
+				var search = document.getElementById('search_tech')
+
+				setTimeout(function() {
+					if (search.value != '') {
+						console.log(search.value);
+						var result = (frontend_tech.searchDataMatch(search.value, 'type', true));
+						console.log(search.value);
+						var tmp = [];
+						var str = ''
+						result.fullArr.forEach(function(item) {
+							console.log(item)
+							tmp.push(item.type);
+							tmp = tmp.removeDuplicatesArr(tmp);
+							str = '';
+							tmp.forEach(function(item) {
+								str += '<div>' + item + '</div>';
+							});
+
+							document.getElementById('suggestion').innerHTML = (str)
+						});
+					} else {
+						console.log(search.value)
+						document.getElementById('suggestion').innerHTML = '';
+					}
+				}, 500);
+
+			}
+			function log() {
+				//////////Can't use forEach bc argument is not an array only looks like an array so doesn't have prototype methods like forEach, filter, etc.
+				var args = Array.prototype.slice.call(arguments);
+				args.unshift('(app)');
+				console.log.bind(console, args);
+
+			};
+			
+			log('test', 'test2', 'test2');
+			
+			
+			function buildIt(){
+				console.log(arguments);
+				var args=Array.prototype.join.call(arguments, (','));
+				console.log(args)
+				args = '(app)'+args;
+				console.log.call(console,args);
+			}
+			
+			buildIt('suz', 'rob', 'elvis');
+			
+			//////////////Scope Example
+			var User = {
+				count : 1,
+
+				getCount : function() {
+					return this.count;
+				}
+			};
+			///outputs 1 calls the function so inside of user scope
+			console.log(User.getCount());
+			/////////outputs undefined becasue it is not bound or called, but just containing User.getCount, which doesn't exist on the Global scope
+			var func = User.getCount;
+			console.log(func());
+			////outputs 1 because it is in the bind moves it from the Global Scope back to the User scope.
+			var func2 = User.getCount.bind(User);
+			for (var x = 1; x < 100; x++) {
+				console.log(x)
+				if (x % 3 == 0 && x % 15 != 0) {
+					console.log(x + ':Fizz')
+				}
+				if (x % 5 == 0 && x % 15 != 0) {
+					console.log(x + ':Buzz')
+				}
+				if (x % 15 == 0 && x != 0) {
+					console.log('FizzBuzz')
+				};
+
+			}
+
+			////////////Closure//////////////
+			//////////////////Closure////////////////////
+
+			function showName(firstName, lastName) {
+
+				var nameIntro = "Your name is ";
+
+				function makeFullName() {
+
+					return nameIntro + firstName + " " + lastName;
+
+				}
+
+			return makeFullName();
+			};
+			var beardawg = showName('Elvis', "BearDawg");
+			console.log(beardawg);
+			///////////==Performs type conversion///////////
+			console.log(8 == '8');
+			//////////=== does not perform type conversion///////////
+			console.log(8 === '8')
+
+			////Classes
+
+			function Vehicle(wheels, engine, pedals, speed) {
+				this.wheels = 4;
+				this.engine = true;
+				this.pedals = false;
+				this.speed = 'fast';
+				this.description = 'This vehicle is fast.';
+			}
+
+
+			Vehicle.prototype.hasWheels = true;
+			//////////Inherits all properties including prototype properties/////////////
+			var car = new Vehicle(4, true, false, 'fast');
+			console.log(car)
+
+			///////////Call inherits only the properties that you explicitly pull out in the function call/////////////
+			///////////ie. bike1 does not inherit the hasWheels property (but does have the brakes property), bike2 does inherit Vehicle protorype properties( but doesn't have the brakes property)///////////////////////
+			function Bike(brakes) {
+				Vehicle.call(this);
+				this.wheels = 2
+				this.engine = false;
+				this.pedals = true;
+				this.speed = 'slow'
+				this.brakes = brakes
+			}
+
+			var bike = new Bike('hand');
+			var bike2 = new Vehicle(2, false, true, 'slow')
+
+			console.log(bike);
+			console.log(bike2);
+
+			///////////Object using Constructor and Prototype Pattern
+			function Animal(name, type, sound) {
+				this.Name = name;
+				this.sound = sound;
+				this.type = type;
+
+			}
+
+
+			Animal.prototype.name = '';
+			Animal.prototype.type = '';
+			Animal.prototype.sound = 'talk';
+
+			function Dog() {
+				Animal.call(Dog);
+				this.sound = 'bark';
+				this.makeSound = function() {
+					return (this.sound);
+				};
+				this.clickHandler = function() {
+					console.log('is clicking from dog with a bind, dog');
+					return 'is clicking from dog with a bind, dog'
+				};
+
+			};
+
+			Dog.prototype.type = 'dog';
+			Dog.prototype.sound = 'bark';
+
+			function Human() {
+				Animal.call(Human);
+
+			}
+
+
+			Human.prototype.type = 'human';
+			Human.prototype.sound = 'talk';
+
+			///End Classes
+			//Instantiation of Classes
+			var suzie = new Human();
+			var elvis = new Dog();
+			var rob = new Animal('rob', 'human', 'click clack');
+			console.log(elvis);
+			console.log(suzie);
+			console.log(rob)
+
+			suzie.Name = 'Suzie';
+			elvis.Name = 'Elvis';
+			//suzie.clickHandler= elvis.clickHandler.bind(suzie);
+			//console.log(suzie.clickHandler())
+			//elvis.clickHandler()
+			/////////Binds the function from the Dog Class to the suzie instance of the Human Class///////////////
+
+			var bindSuzie = elvis.makeSound.bind(suzie);
+			console.log(bindSuzie())
+			///////////////binds a button////////////////////
+			$('#clickme').click(elvis.clickHandler.bind(suzie));
+
+			document.getElementById('clickmetoo').addEventListener('click', function(event) {
+				var consoleData2 = elvis.clickHandler.bind(suzie);
+				/////////stops this on the first bubble, i.e. the div clicked - will not go down to button//////////
+				event.stopPropagation
+				console.log(event.target)
+				//console.log(consoleData2());
+			}, false);
+
+			//////////////Apply and Call "Borrow" a function//////////////
+			///////////Bind adds a function to an object////////////////
+			bike.clickHandler = elvis.clickHandler.bind(bike);
+			console.log(bike.clickHandler());
+			bike.description = bike.clickHandler();
+			console.log(bike);
+
+			function describeAnimal(type, color, name) {
+				if (type == 'bear') {
+					return name + ' stay away from me';
+				} else if (type == 'dog') {
+					return name + ' can i pet you, friend';
+				} else {
+					return 'I\'d rather be with an Animal!';
+				}
+			}
+
+			var greetBear = describeAnimal.bind(null, 'bear', 'brown');
+			console.log(greetBear('Davy'));
+			var greetDog = describeAnimal.bind(null, 'dog', 'white');
+			console.log(greetDog('Elvis'));
+			var greetOther = describeAnimal(null, 'other', 'purple');
+			console.log(greetOther)
+
+			function testParamsArr(type, name, gender) {
+				var args = Array.prototype.slice.call(arguments);
+				console.log(arguments);
+			}
+
+			testParamsArr('dog', 'Elvis', 'male')
+
+			/////////////////Apply and Call/////////////////
+			var string_obj = {
+				str : 'Test',
+				alerter : function() {
+					var str = 'Alert:' + this.str;
+					console.log(str)
+				}
+			};
+			var alertme = {
+				str : 'This is my string, dammit!'
+			};
+			///calls have to be made to a object; will not work on a plain string.
+			//easiest way to get around this is to add string to an object with a key of str
+			string_obj.alerter.call(alertme);
+
+			var starting_five = {
+				center : 'bill russell',
+				shooting_guard : 'michael jordan',
+				power_forward : 'charles barkley',
+				small_forward : 'lebron james',
+				point_guard : 'steph curry',
+				subIn : function(property, name) {
+
+					this[property] = name;
+					console.log(this);
+
+					return this;
+
+				}
+			};
+
+			var second_five = {
+				center : 'hakim olajuwan',
+				shooting_guard : 'klay thompson',
+				power_forward : 'tim duncan',
+				small_forward : 'draymond green',
+				point_guard : 'chris paul',
+				subIn : function(props) {
+
+					this[props[0]] = props[1];
+					return this;
+				}
+			};
+			var third_five = {
+				center : 'marc gasol',
+				shooting_guard : 'kobe bryant',
+				power_forward : 'blake griffin',
+				small_forward : 'kevin durant',
+				point_guard : 'russell westbrook',
+
+			};
+
+			starting_five.subIn('power_forward', second_five['power_forward']);
+
+			///////////////use call because args are strings////////////////
+			starting_five.subIn.call(second_five, 'power_forward', third_five['power_forward']);
+
+			/////////////use apply because args are an array i.e ['power_forward', 'Mookie Blaylock']/////////////////
+			second_five.subIn.apply(third_five, ['power_forward', 'Mookie Blaylock']);
+
+			console.log(starting_five);
+			console.log(second_five);
+			console.log(third_five)
+
+			var startingFive = ['Hakim', 'Steph', 'Draymond', 'MJ', 'Nique'];
+
+			function heresYourFive() {
+
+				return 'Heres Your Starting Five: ' + startingFive.join(', ');
+			}
+
+
+			console.log(heresYourFive());
+			var items = document.getElementsByClassName('item')
+
+			//////////////Shows how items trickle/capture and bubble
+			//////////////For Demo only
+			/////////////Not the recommended way to do it
+			/////////////Adds event listeners to all dom nodes so you can see the bubbling
+			for (var i = 0; i < items.length; i++) {
+				var el = items[i];
+
+				//capturing phase
+				el.addEventListener("click", function(event) {
+					console.log(event.currentTarget.id)
+					if (event.currentTarget.id == 'bubbler')
+						starting_five.subIn('power_forward', third_five['power_forward']);
+					console.log(starting_five)
+
+				}, true);
+
+				//bubbling phase
+				el.addEventListener("click", function(event) {
+					console.log(event.currentTarget.id)
+					starting_five.subIn('power_forward', third_five['power_forward']);
+				}, false);
+			}
+
+			//////////////Better way to handle events; it adds the event to the outermost div in which
+			/////////////the link/button  is contained and is meaningful and takes advantage of bubbling to make sure event leads to right action (via function)
+
+			document.getElementById('bubbles').addEventListener('click', function(event) {
+
+				console.log(event.target.id);
+				if (event.target.id != 'bubbles' && event.target.id != 'l_bubbles' && event.target.id != 'ul_bubbles') {
+					document.getElementById(event.target.id).innerHTML = 'Clicked id ' + event.target.id;
+				}
+				starting_five.subIn('power_forward', third_five['power_forward']);
+			});
+
+			/////////for...in loop////////////
+
+			var scores = {
+				suzie : 88,
+				rob : 85,
+				elvis : 75
+			};
+			for (prop in scores) {
+				if (scores.hasOwnProperty(prop)) {
+					console.log(prop + ':' + scores[prop]);
+				}
+			}
+
+			///////////HTML node Creator////////////////
+			function elt(name, attributes, str) {
+				var node = document.createElement(name);
+				if (attributes) {
+					attributes.forEach(function(item) {
+						for (var attr in item) {
+
+							if (item.hasOwnProperty(attr)) {
+
+								node.setAttribute(attr, item[attr]);
+
+							}
+						}
+					});
+				}
+				for (var i = 2; i < arguments.length; i++) {
+					var child = arguments[i];
+					console.log(child)
+					if ( typeof child == "string") {
+
+						child = document.createTextNode(child);
+						node.appendChild(child);
+					}
+				}
+
+				return node;
+			}
+
+
+			console.log(elt('section', [{
+				'id' : 'test'
+			}, {
+				'class' : 'test'
+			}], 'test'));
+	
+	
+	
+			
+//////////////Module Pattern///////////////			
+		var myapp=myapp||{}
+		myapp.loadHttp = (function(){
+			
+				
+			
+			 var getJSON = function (url){
+			 return new Promise(function(resolve, reject){
+					$.getJSON(url, function(response){
+						resolve(response.rows);
+					});
+				});
+				
+			};
+			return{
+				loadApi: function(url){
+					return new Promise(function(resolve, reject){
+						resolve(getJSON(url));
+					});
+					
+				}
+			};
+			
+			
+		}());
+		
+		myapp.processData = (function(){
+			var addData = function(url){
+				return new Promise(function(resolve, reject){
+					resolve(myapp.loadHttp.loadApi(url));
+				});
+				
+				
+			};
+			return{
+				runData:function(url){
+					return new Promise(function(resolve, reject){
+						resolve(addData(url));
+					});					
+				}
+			};
+		}());
+		
+		myapp.loadHttp.loadApi('https://www.googleapis.com/fusiontables/v1/query?sql=SELECT+TeacherLastName%2CTeacherFirstName%2CShipType%2C+Ship%2C+ShipUrl%2C+CruiseURL%2C+Mission%2C+CruiseDates%2C+SubjectsTaught%2C+School%2C+City%2C+State%2C+Image%2C+Grades%2C+SchoolURL%2C+WordPressURL%2C+Year+FROM+1Xh5kWI_ZHd-PZRuPcgrV_oS13HHN6JGtRK4s75Mn+ORDER%20BY+TeacherLastName%22&key=AIzaSyBBcCEirvYGEa2QoGas7w2uaWQweDF2pi0').then(function(data){
+			console.log(data)
+		});
+		
+		myapp.processData.runData('https://www.googleapis.com/fusiontables/v1/query?sql=SELECT+TeacherLastName%2CTeacherFirstName%2CShipType%2C+Ship%2C+ShipUrl%2C+CruiseURL%2C+Mission%2C+CruiseDates%2C+SubjectsTaught%2C+School%2C+City%2C+State%2C+Image%2C+Grades%2C+SchoolURL%2C+WordPressURL%2C+Year+FROM+1Xh5kWI_ZHd-PZRuPcgrV_oS13HHN6JGtRK4s75Mn+ORDER%20BY+TeacherLastName%22&key=AIzaSyBBcCEirvYGEa2QoGas7w2uaWQweDF2pi0').then(function(data){
+			console.log(data)
+		});
+			//document.body.appendChild(elt('section', [{'id':'test'}], 'test'));
+			
+			
+///////More Modules - this time to curry//////////	
+var docrazy = docrazy || {}	;
+var messages = messages ||{};
+docrazy.curry =(function()
+{
+	scopingIt = function(fn, scope){
+		var scope = scope || window;
+		var args =[];
+		for(var i=2; i<arguments.length; i++){
+			args.push(arguments[i]);
+		}
+		return 
+		
+			fn.apply(scope, args);
+				
+	};
+	
+	return {
+		currymybusiness:function(fn,scope){
+			scopingIt(fn,scope)
+		},
+		
+
+	};
+}());
+
+messages.talk = (function(){
+	
+	return{
+		sayIt: function(msg){
+			var msg=msg
+			console.log(msg)
+			console.log(msg+' Thank you');
+			return msg+' Thank you';
+		}
+	};
+}());
+
+//Binding///////
+
+var bindit = 
+{
+	 x:function(str){
+	 	return str
+	 },
+	 y:'your face',
+	 sayIt: function(msg){
+			var msg=msg
+			console.log(msg)
+			return msg+' Thank you';
+		}
+};
+
+var bindy=function(){
+	console.log(this.x('dog')+': success');
+	console.log(this.y+': success');
+	console.log(this.sayIt('cat'))
+};
+
+
+var bindertoo = bindy.bind(messages.talk);
+
+var binder = bindy.bind(bindit)
+binder()
+
+
+var button = elt('button',[{id:'curryTest'}, {onclick:"docrazy.curry.currymybusiness(docrazy.curry.currymybusiness.bind(messages.talk.sayIt('dog')) ,'button')"}]);
+button.innerHTML='Curry'
+document.body.appendChild(button);
+
+
+
+function Person(sex, hair){
+	this.sex = sex;
+	this.hair = hair;	
+};
+
+var person = Person();
+///undefined
+console.log(person);
+
+var person = new Person('female', 'brown');
+////object {sex: 'female', hair:'brown'}
+console.log(person);
+
+console.log(window.location.href.split('?')[1])
+
+Array.prototype.duplicator=function(){
+	var arr =this;
+	arr.forEach(function(item){
+		arr.push(item);
+	});
+	return arr;
+};
+
+var arr=[1,2,3,4,5];
+
+console.log(arr.duplicator());
+arr.length==10? console.log( true) : console.log( false);
+console.log(~~3.64)
+console.log(( window.foo || ( window.foo = "bar" ) ));
+var myapp2 = myapp2||{};
+
+	myapp2.loadHttp = (function(){
+			 var getJSON = function (url){
+			 	return new Promise(function(resolve, reject){
+			 	
+					$.getJSON(url).then(function(response){
+							resolve(response);
+					});
+				});
+			};
+			return{
+					
+					loadData: function(url){
+					return new Promise(function(resolve, reject){
+					resolve(getJSON(url))
+					});
+					}
+				
+				
+			};
+			
+			
+		}());
+myapp2.loadHttp.loadData('https://www.googleapis.com/fusiontables/v1/query?sql=SELECT+TeacherLastName%2CTeacherFirstName%2CShipType%2C+Ship%2C+ShipUrl%2C+CruiseURL%2C+Mission%2C+CruiseDates%2C+SubjectsTaught%2C+School%2C+City%2C+State%2C+Image%2C+Grades%2C+SchoolURL%2C+WordPressURL%2C+Year+FROM+1Xh5kWI_ZHd-PZRuPcgrV_oS13HHN6JGtRK4s75Mn+ORDER%20BY+TeacherLastName%22&key=AIzaSyBBcCEirvYGEa2QoGas7w2uaWQweDF2pi0').then(function(data){
+	var tmp =data;
+	console.log(data.columns);
+});
+
+myapp2.loadHttp.loadData('https://www.googleapis.com/fusiontables/v1/query?sql=SELECT+CityName%2C+Region%2C+CountryID+FROM+1B8NpmfiAc414JhWeVZcSqiz4coLc_OeIh7umUDGs+WHERE+Lat+%3C=38.935201799999994+AND+Lat%3E=38.8352018+AND+Long%3C=-76.9316695+AND+Long%3E=-77.03166949999999&key=AIzaSyBBcCEirvYGEa2QoGas7w2uaWQweDF2pi0').then(function(data){
+	console.log(data.columns);
+});
+
+function showMeDom()
+{
+	var body = document.body;
+	var childnodes = body.childNodes;
+	console.log(childnodes)
+	for(var i=0; i<childnodes.length; i++)
+	{
+		//console.log(childnodes[i]);
+		if(childnodes[i].nodeName.toLowerCase()=='#text')
+		{
+			console.log(childnodes[i]);
+			
+		}
+	}
+	
+}
+showMeDom();
+document.getElementById('main').setAttribute('class', 'test');
+console.log(document.getElementById('main'));
+
+//////////////Uses property of toString() method which allows you to control the "base" of the number
+/////////////Here it calls to Base 16 or hexadecimal which is how hex codes are computed
+////////////the default base is base 10 or the normal way humans count
+function componentToHex(c) {
+		    var hex = c.toString(16);
+		    return hex.length == 1 ? "0" + hex : hex;
+		}
+		console.log(componentToHex(40));
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+console.log(rgbToHex(0, 87, 165))
+		</script>
+	</body>
+</html>

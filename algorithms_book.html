@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<meta charset="utf8">
+<html>
+	<head></head>
+	<body>
+		<script>
+			//////////Fibonacci///////
+			function fibonacci(l_num){
+				var fibonacci = [];
+				/*fibonacci[0]=0;
+				fibonacci[1]=1;
+				fibonacci[2]=1;*/
+				fibonacci=[0, 1, 1]
+				for(var i=3; i<l_num; i++){
+					fibonacci[i] = fibonacci[i-1]+fibonacci[i-2];
+					//console.log(fibonacci[i])
+				}
+				//console.log(fibonacci);
+				return fibonacci;
+			}
+			fibonacci(100);
+			///////////////Iterator functions///////////////
+			var numbers =[0,1,2,3,4,5,6,7,8,9];
+			var isEven = function(x)
+			{
+				if(x%2==0){
+					return true;
+				}
+				else{
+					return false;
+				}
+			};
+			
+			//console.log(numbers.every(isEven));
+			//console.log(numbers.some(isEven));
+			numbers.forEach(function(x){
+				//console.log(isEven(x));
+			});
+			
+			var myMap = numbers.map(isEven);
+			var myFilter =numbers.filter(isEven);
+			var myReduce=numbers.reduce(function(previous, current){ 
+				return previous+current;
+			});
+			//console.log(myMap);
+			//console.log(myFilter);
+			//console.log(myReduce);
+			//////////////////Sorting////////////////////
+			
+			//////////////sorting numerically/////////////////
+			
+			function compare (a, b){
+				if(a<b){
+					return -1;
+				}
+				if(a>b){
+					return 1;
+				}
+				return 0;
+			}
+			
+			
+			var numbers2 = [0,6,5,8,3];
+			//console.log(numbers2.sort(compare));
+			
+			var people =[{name: 'Suzie', age:34}, {name:'Rob', age:33}];
+			//console.log(people.sort(function(a ,b){return a.age-b.age}));
+			
+			//////////////Stacks (LIFO)/////////////////
+			
+			function Stack(){
+				var items = [];
+				this.push = function(element){
+					items.push(element);
+				};
+				this.pop = function(){
+					return items.pop();
+				};
+				this.peek = function(){
+					return items[items.length-1];
+				};
+				this.isEmpty = function(){
+					return items.length==0;
+				};
+				this.size = function(){
+					return items.length;
+				};
+				this.clear = function(){
+					items=[];
+				};
+				this.print = function(){
+					console.log(items.toString());
+				};
+			}
+			
+			var stack = new Stack();
+			stack.push(5);
+			stack.push(8);
+			stack.push(11);
+			//console.log(stack.isEmpty());
+			//console.log(stack.peek());
+			//console.log(stack.size());
+			stack.push(15);
+			stack.pop();
+			stack.pop();
+			//stack.print();
+			
+			//////////////converting base 10 to different bases - using the Stack Class/////////////
+			
+			function baseConverter(decNumber, base){
+				var remStack = new Stack(),
+				rem, 
+				baseString='';
+				digits='0123456789ABCDEFGHIJKLMNOPFQRSTUVWXYZ';
+				while (decNumber>0){
+					rem = Math.floor(decNumber % base)
+					
+						remStack.push(rem);
+						decNumber = Math.floor(decNumber / base);
+					}
+				while(!remStack.isEmpty()){
+					baseString+= digits[remStack.pop()];
+				}	
+				return baseString;
+			};
+			
+			//console.log(baseConverter(1039, 2));
+			//console.log(baseConverter(1039, 6));
+			//console.log(baseConverter(233, 16));
+			
+			function findHexCode(r, g, b)
+			{
+				var args=Array.prototype.slice.call(arguments);
+				var hex='';
+				args.forEach(function(num){
+					hex+= baseConverter(num, 16);
+				});
+				return hex;
+			}
+			
+			//console.log(findHexCode(233, 233, 233));
+			
+			//////////////////Queues (FIFO)//////////////////
+			
+			function Queue(){
+				var items = [];
+				this.enqueue = function(element){
+					items.push(element);
+				};
+				this.dequeue = function(){
+					return items.shift();
+				};
+				this.front = function(){
+					return items[0];
+				};
+				this.isEmpty = function(){
+					return items.length==0;
+				};
+				this.clear = function(){
+					items=[];
+				};
+				this.size = function(){
+					return items.length;
+				};
+				this.print = function(){
+					console.log(items.toString());
+				};
+			}
+			
+			var queue = new Queue();
+			
+			queue.enqueue('John');
+			queue.enqueue('Jack');
+			queue.enqueue('Camila');
+			//queue.print();
+			//console.log(queue.size());
+			//console.log(queue.isEmpty());
+			queue.dequeue();
+			queue.dequeue();
+			//queue.print();
+			
+			
+			//////////Priority Queue - child class of Queue////////
+			
+			function PriorityQueue(){
+				var items = [];
+				function QueueElement(element, priority){
+					this.element = element;
+					this.priority = priority;
+				};
+				this.enqueue = function(element, priority){
+					var queueElement = new QueueElement(element, priority);
+					if(this.isEmpty()){
+						items.push(queueElement)
+					}
+					else{
+						var added = false;
+						for(var i=0; i<items.length; i++){
+							if(queueElement.priority<items[i].priority){
+								items.splice(i, 0, queueElement);
+								added=true;
+								break;
+							}
+						}
+					}
+					if(!added){
+						items.push(queueElement);
+					}
+				};
+				
+				this.dequeue = function(){
+					return items.shift();
+				};
+				this.front = function(){
+					return items[0];
+				};
+				this.isEmpty = function(){
+					return items.length==0;
+				};
+				this.clear = function(){
+					items=[];
+				};
+				this.size = function(){
+					return items.length;
+				};
+				this.print = function(){
+					console.log(items);
+				};
+				///////other methods - same as default
+			}
+			var pqueue = new PriorityQueue();
+			
+			pqueue.enqueue('John', 2);
+			pqueue.enqueue('Jack', 1);
+			pqueue.enqueue('Camila', 1);
+			//console.log(pqueue.isEmpty())
+			//console.log(pqueue.size());
+			//console.log(pqueue.front().element);
+			pqueue.dequeue();
+			pqueue.dequeue();
+			//pqueue.print();
+		
+		////////////Circular Queue
+			function hotPotato(nameList, num){
+				var queue = new Queue();
+				for (var i=0; i<nameList.length; i++){
+					queue.enqueue(nameList[i]);
+				}
+				var eliminated = '';
+				while (queue.size()>1){
+					for(var i=0; i<num; i++){
+						queue.enqueue(queue.dequeue());
+						eliminated = queue.dequeue();
+						//console.log(eliminated+'was elminated from the Hot Potato Game.');
+					}
+						
+						return queue.dequeue();
+				}
+				
+			}
+			var names = ['John', 'Jack', 'Camila', 'Ingrid', 'Carl'];
+			var winner = hotPotato(names, 4);
+			//console.log('The Winner is: '+winner);	
+			
+	///////////////////Linked List////////////////////		
+		function LinkedList(){
+			var Node = function(element){
+				this.element = element;
+				this.next = null;
+			};
+			
+			var length =0;
+			var head =null;
+			this.append= function(element){
+				var node = new Node(element),
+				current;
+				if(head===null){
+					head = node;
+				}else{
+					current = head;
+					//////////loop the list until find the last item
+					while (current.next){
+						
+					current=current.next;
+				
+					}
+				//////////get the last item and assign next to node to make the link	
+				current.next = node;
+					console.log(current)
+					console.log(current.next)
+					
+				}
+				length++;
+			};
+			this.insert = function(position, element){
+				if(position>=0 && position<=length){
+					
+					var node = new Node(element), 
+					current=head,
+					previous,
+					index=0;
+					if(position===0){
+						firstposition = current;
+						head =node;
+					}else{
+						/////////loop through indices, once it equals the position argument
+						/////////assign the current previous and current variables to the items that will precede and follow the inserted item///////////
+						while(index++<position){
+							
+							previous=current;
+							current=current.next;
+							
+						}
+						node.next=current;
+						
+						previous.next=node;
+					}
+				length++;
+				
+				return true;
+				}
+				else{
+					return false;
+				}
+				
+			};
+			this.removeAt = function(position){
+				if(position>-1 && position<length)
+				{
+					var current = head, 
+					previous,
+					index=0;
+				
+				if(position===0){
+					head = current.next
+				}else{
+					while(index++<position){
+						previous=current;
+						current=current.next;
+					}
+					previous.next = current.next
+					length--;
+					}
+					return current.element;
+				}else{
+					return null;
+				}
+				
+			};
+			this.remove = function(element){
+				var index= this.indexOf(element);
+				return this.removeAt(index);
+			};
+			this.indexOf = function(element){
+				var current = head,
+				index=-1;
+				while(current){
+					
+					if(element === current.element){
+						index=index++;
+						return index;
+					}
+					index++;
+					current = current.next;
+				}
+				return -1;
+			};
+			this.isEmpty=function(){
+				
+					return length===0;
+			};
+			this.size=function(){
+				return length;
+			};
+			this.toString = function(){
+				var current = head;
+				string='';
+				while(current){
+					string+= current.element+'';
+					current=current.next;
+				}
+				return string
+			};
+			this.getHead = function(){
+				return head;
+			};
+			this.print=function(){
+				console.log(this.toString());
+			};
+		}	
+		//////////////DoublyLinkedList///////////
+		function DoublyLinkedList(){
+			var Node = function(element){
+				this.element = element;
+				this.next = null;
+				this.prev=null;
+			};
+			var length =0;
+			var head =null;
+			var tail =null;
+				this.append= function(element){
+				var node = new Node(element),
+				current;
+				if(head===null){
+					head = node;
+				}else{
+					current = head;
+					//////////loop the list until find the last item
+					while (current.next){
+						
+					current=current.next;
+				
+					}
+				//////////get the last item and assign next to node to make the link	
+				current.next = node;
+					
+					
+				}
+				length++;
+			};
+			this.insert = function(position, element){
+				///check for out of bounds values
+				if(position>=0 && position<=length)
+				{
+					var node = new Node(element),
+					current=head, 
+					previous,
+					index=0;
+				
+					if(position==0){
+						if(!head){
+							head =node;
+							tail=node;
+						}
+						else{
+							node.next = current;
+							current.prev=node;
+							head =node;
+						}
+					}
+					else if(position===length){
+						current =tail;
+						current.next = node; 
+						node.prev=current;
+						tail = node;
+					}
+					else{
+						while(index++<position){
+							previous = current;
+							current=current.next;
+						}
+					node.next = current;
+					previous.next=node;
+					current.preve =node;
+					node.prev=previous;	
+					}
+					length++;
+					return true;
+				}	
+				else{
+					return false;
+				}
+			};
+			this.removeAt = function(position){
+				//look for out of bounds
+				if(position>-1 && position<length){
+					var current = head,
+					previous,	
+					index=0;
+					if(position===0){
+						head = current.next;
+						///if there is only one item update tail
+						if(length===1){
+							tail =null;
+						}else{
+							head.prev=null;
+						}
+					}else if(position === length-1){
+						tail =current.prev;
+						tail.next = null;
+					}else{
+						while (index++<position){
+							previous = current;
+							current = current.next;
+						}
+						/////link previous with current's next - skip it
+						previous.next = current.next;
+						current.next.prev = previous;
+					}
+					length--;
+					return current.element;
+				}
+				else{
+					return null;
+				}
+			};
+			this.remove = function(element){
+				var index= this.indexOf(element);
+				return this.removeAt(index);
+			};
+			this.indexOf = function(element){
+				var current = head,
+				index=-1;
+				while(current){
+					
+					if(element === current.element){
+						index=index++;
+						return index;
+					}
+					index++;
+					current = current.next;
+				}
+				return -1;
+			};
+			this.isEmpty=function(){
+				
+					return length===0;
+			};
+			this.size=function(){
+				return length;
+			};
+			this.toString = function(){
+				var current = head;
+				string='';
+				while(current){
+					string+= current.element+'';
+					current=current.next;
+				}
+				return string
+			};
+			this.getHead = function(){
+				return head;
+			};
+			this.print=function(){
+				console.log(this.toString());
+			};
+		}
+		var list = new DoublyLinkedList();
+		list.append(10);
+		list.append(15);
+		list.append(225);
+		list.insert(1, 346);
+		list.removeAt(2);
+	//	console.log(list.size());
+		//list.print();	
+		
+		
+		//////////////binary search - my try///////////////
+		var binarySearch = function(array, term, property) {
+		var min = 0;
+		var max = array.length - 1;
+	    var index;
+	    if(property==undefined)
+	    {
+	    while(min <= max) {
+	    index = Math.floor((max + min) / 2);
+	
+	        if (array[index] === term) {
+	            return {'index':index, 'term': term}
+	        }
+	        else if (array[index] < term) {
+	            min = index + 1;
+	        }
+	        else {
+	            max = index - 1;
+	        }
+	
+	    }
+		return {'index':'error - no '+term+'in this array', 'term':term}
+		}else{
+			  while(min <= max) {
+	   		 index = Math.floor((max + min) / 2);
+	        if (array[index][property] === term) {
+	            return {'index':index, 'term': term, 'property': property}
+	        }
+	        else if (array[index][property] < term) {
+	            min = index + 1;
+	        }
+	        else {
+	            max = index - 1;
+	        }
+	
+	    }
+	    
+		return {'index':'error - no '+term+'in this array', 'term':term, 'property':property};
+		}
+	};
+		
+	var names = [{name:'betty'}, {name:'cal'},{name:'dave'}, {name:'frank'}, {name:'garret'}];
+	var names2 = ['betty', 'cal', 'dave', 'frank', 'garret']
+var result = binarySearch(names, 'cal', 'name');
+var result2 = binarySearch(names2, 'cal')
+
+//console.log("Found name at index ",  result);
+//console.log("Found name at index ",  result2);
+
+
+//////////Set////////////////
+////////////May be the most useful data structure for me////////////////
+function Set(){
+	var items={};
+	this.add=function(value){
+		if(!this.has(value)){
+			items[value]=value;
+			return true;
+		}
+		return false;
+	};
+	this.remove = function(value){
+		if(this.has(value)){
+			delete items[value];
+			return true;
+		}
+		return false;
+	};
+	this.has=function(value){
+		return items.hasOwnProperty(value);
+		
+	};
+	this.clear = function()	{
+		items={};
+	};
+	this.size = function(){
+		return Object.keys(items).length;
+	};
+	this.values =function(){
+		return Object.keys(items);
+		
+	};
+	this.union = function(otherSet){
+		var unionSet = new Set();
+		var values = this.values();
+		for(var i=0; i<values.length; i++){
+			unionSet.add(values[i]);
+		}
+		values = otherSet.vaues();
+		for(var i=0; i<values.length; i++){
+			unionSet.add(values[i]);
+		}
+		return unionSet;
+	};
+	///Compare Sets////
+	this.intersection = function(otherSet){
+		var intersectionSet = new Set();
+		var values=this.values();
+		for(i=0; i<values.length; i++){
+			if(otherSet.has(values[i])){
+				intersectionSet.add(values[i]);
+			}
+		} 
+		return intersectionSet;
+	};
+	this.difference = function(otherSet){
+		
+		var differenceSet = new Set();
+		var values = this.values();
+		for(i=0; i<values.length; i++){
+			if(!otherSet.has(values[i])){
+				differenceSet.add(values[i]);
+			}
+		} 
+		return differenceSet;
+	};
+	this.subset = function(otherSet){
+		if(this.size>otherSet.size()){
+			return false;
+		}else{
+			var values = this.values();
+			for(var x=0; x<values.length; x++){
+				if(!otherSet.has(values[x])){
+					return false;
+				}
+			}
+			return true;
+		}
+	};
+}
+
+
+var set = new Set();
+set.add(1);
+//console.log(set.values());
+//console.log(set.has(1));
+//console.log(set.size());
+set.add('test');
+//console.log(set.values());
+//console.log(set.has(2));
+//console.log(set.has('test'));
+//console.log(set.size());
+//set.remove('test');
+//set.remove(1);
+//console.log(set.values());		
+
+
+set2=new Set();
+set2.add(3);
+set2.add('supercalifragilisciousexpialidocious')		
+var arr = [];
+
+arr.push({set1:set.values()}, {set2:set2.values()});
+//console.log(arr);		
+
+var setA = new Set();
+var setB = new Set();
+setA.add(1);
+setA.add(2);
+setA.add(3);
+
+setB.add(2);
+setB.add(3);
+setB.add(4);
+	
+var intersectionAB = setA.intersection(setB);
+//console.log(intersectionAB.values());	
+var differenceAB = setA.difference(setB);
+//console.log(differenceAB.values())
+
+var setA = new Set(); 
+setA.add(1); 
+setA.add(2); 
+var setB = new Set(); 
+setB.add (1); 
+setB.add(2); 
+setB.add(3); 
+var setC = new Set(); 
+setC.add(2); 
+setC.add(3); 
+setC.add(4); 
+//console.log(setA.subset(setB)); 
+//console.log(setA.subset(setC));
+
+/////////////////Dictionary/////////////////
+
+function Dictionary(){
+	var items = {};
+	this.set=function(key, value){
+		items[key]=value;
+		
+	};
+	this.remove=function(key){
+		if(this.has(key)){
+			delete items[key];
+			return true;
+		}
+		else{
+			return false;
+		}
+	};
+	this.clear=function(){
+		items={};
+	};
+	this.has=function(key){
+		return key in items;
+	};
+	this.get = function(key) {
+		 return this.has( key) ? items[ key] : undefined; 
+		 };
+
+	this.size = function(){
+		return Object.keys(items).length;
+	};
+	this.keys=function(){
+		var keys =[];
+		for(key in items){
+			keys.push(key);
+		}
+		return keys;
+	};
+	this.values =function(){
+		var values =[];
+		for (var item in items){
+				if(this.has(item)){
+					values.push(items[item]);
+				}
+			}
+			return values;
+	};
+	
+}
+
+var dictionary = new Dictionary();
+dictionary.set('Gandalf', 'gandalf@gmail.com');
+dictionary.set('John','johnsnow@gmail.com');
+dictionary.set('Tyrion', 'imp@gmail.com');
+console.log('dictionary has '+dictionary.has('Gandalf'));
+console.log('dictionary size is '+dictionary.size());
+console.log('dictionary keys: '+dictionary.keys());
+console.log('dictionary values: ' +dictionary.values());
+dictionary.remove('Gandalf');
+console.log(dictionary.values());
+
+////////////HashTable////////////
+function HashTable(){
+	var table =[];
+	///generates a hash key for each item
+	///used in the methods below
+	var loseloseHashCode = function(key){
+		var hash = 0; //{ 1} 
+		for (var i = 0; i < key.length; i++) {
+			 //{ 2} 
+			 hash += key.charCodeAt( i); //{ 3} 
+			 } 
+			 return hash%37;
+
+	};
+	var djb2HashCode = function (key) {
+		 var hash = 5381; //{ 1} 
+		 for (var i = 0; i < key.length; i++) { //{ 2}
+		 	 hash = hash * 33 + key.charCodeAt( i); //{ 3} 
+		 	 } 
+		 	 return hash % 1013; //{ 4} 
+	};
+
+	var ValuePair = function(key, value){
+				this.key = key;
+				this.value = value;
+				this.toString = function(){
+					return'['+this.key+ '- '+this.value+']';
+				}
+		};
+	/*///prevents collision using LinkedList
+			
+	this.put= function(key, value){
+		var position = loseloseHashCode(key);
+		//console.log(position+'- '+key);
+		//table[position]=value;
+		if(table[position]==undefined){
+			table[position]=new LinkedList();
+		}
+		table[position].append(new ValuePair(key, value));
+	};
+	this.remove=function(key){
+		//table[loseloseHashCode(key)]=undefined;
+		var position = loseloseHashCode(key);
+		if(table[position]!==undefined){
+			var current = table[position].getHead();
+			while (current.next){
+				if(current.element.key===key){
+					table[position].remove(current.element);
+					if(table[position].isEmpty()){
+						table[position]=undefined;
+					}
+					return true;
+				}
+				current=current.next;
+				
+			}
+			if(current.element.key===key){
+				table[position].remove(current.element);
+				if(table[position].isEmpty()){
+					table[position]=undefined;
+				}
+				return true;
+			}
+		}
+		return false; 
+	};
+	this.get=function(key){
+		var position = loseloseHashCode(key);
+		if(table[position]!==undefined){
+			var current =table[position].getHead();
+			while (current.next){
+				if(current.element.key===key){
+					return current.element.value;
+				}
+				current=current.next;
+			}
+			if(current.element.key===key){
+				return current.element.value;
+			};
+			return undefined;
+		}
+		return table[loseloseHashCode(key)];
+	};*/
+	
+	/*Index Probing*/
+	this.put =function(key, value){
+		var position = djb2HashCode(key);
+		if(table[position]==undefined){
+			table[position]=new ValuePair(key, value);
+		}else{
+			var index = position++;
+			while (table[index]!=undefined){
+				index++
+			}
+			table[index] = new ValuePair(key, value);
+		}
+	};
+	this.get = function(key){
+		var position = djb2HashCode(key);
+		if(table[position].key===key){
+			return table[postion].value;
+		}else{
+			var index = position++;
+			while (table[index]===undefined || table[index].key!==key){
+			index++;	
+			}
+			if(table[index].key===key){
+				return table[index].value;
+			}
+		}
+		return undefined;
+	};
+	this.remove = function(key){
+		var position = djb2HashCode(key);
+		if(table[position].key===key){
+			return table[index]=undefined;
+		}else{
+			var index = position++;
+			while (table[index]===undefined || table[index].key!==key){
+			index++;	
+			}
+			if(table[index].key===key){
+				return table[index]=undefined;
+			}
+		}
+		return undefined;
+	};
+	this.print = function(){
+		
+		for (var i=0; i<table.length; i++){
+			if(table[i]!==undefined){
+				console.log(i+':'+table[i]);
+			}
+		}
+	};
+	
+	
+}
+
+var hash = new HashTable(); 
+hash.put('Gandalf', 'gandalf@ email.com'); 
+hash.put('John', 'johnsnow@ email.com'); 
+hash.put('Tyrion', 'tyrion@ email.com'); 
+hash.put('Aaron', 'aaron@ email.com'); 
+hash.put('Donnie', 'donnie@ email.com'); 
+hash.put('Ana', 'ana@ email.com'); 
+hash.put('Jonathan', 'jonathan@ email.com'); 
+hash.put('Jamie', 'jamie@ email.com'); 
+hash.put('Sue', 'sue@ email.com'); 
+hash.put('Mindy', 'mindy@ email.com'); 
+hash.put('Paul', 'paul@ email.com'); 
+hash.put('Nathan', 'nathan@ email.com');
+
+//hash.print();
+
+///Binary Search Tree//////////
+function BinarySearchTree(){
+	var Node=function(key){
+		this.key = key;
+		this.left=null;
+		this.right=null;
+	};
+	var root =null;
+	
+	var insertNode = function(node, newNode){
+		if (newNode.key<node.key){
+			if(node.left === null){
+				node.left = newNode;
+			}else{
+				insertNode(node.left, newNode);
+			}
+		}else{
+			if(node.right===null){
+				node.right=newNode;
+			}else{
+				insertNode(node.right, newNode);
+			}
+		}
+	};
+	var inOrderTraverse=function(node, callback){
+		if(node!==null){
+			inOrderTraverse(node.left, callback);
+			callback(node.key);
+			inOrderTraverse(node.right, callback);
+		}
+	};
+	var preOrderTraverse=function(node, callback){
+		if(node!==null){
+			callback(node.key);
+			preOrderTraverse(node.left, callback);
+			preOrderTraverse(node.right, callback);
+		}
+	};
+	var postOrderTraverse=function(node, callback){
+		if(node!==null){
+		postOrderTraverse(node.left, callback);
+		postOrderTraverse(node.right, callback);
+		callback(node.key);
+		}
+	};
+	var minNode=function(node){
+		if(node){
+			while(node && node.left!==null){
+				node= node.left;
+			}
+			return node.key;
+		}
+		return null;
+	};
+	var findMinNode=function(node){
+			if(node){
+			while(node && node.left!==null){
+				node= node.left;
+			}
+			return node;
+		}
+		return null;
+	};
+	var maxNode = function(node){
+		if(node){
+			while(node && node.right!==null){
+				node=node.right;
+			}
+			return node.key;
+		}
+		return null;
+	};
+	var searchNode = function(node, key){
+		//console.log(node)
+		if (node===null){ //{ 2} 
+		return false; 
+		} 
+		if (key < node.key){ 
+			//{ 3} 
+			//console.log('left:',node, key);
+			return searchNode( node.left, key); //{ 4} 
+		} 
+		else if (key > node.key){ //{ 5} 
+			//console.log( 'right:',node, key); //{ 6} 
+			
+			return searchNode(node.right, key); //{ 6} 
+			} 	
+			
+		else { 
+			return true; //{ 7} 
+		
+		}
+		
+	};
+	var removeNode = function(node, key){
+		if (node === null){ //{ 2} 
+		return null; 
+		} 
+		if (key < node.key){ //{ 3} 
+		node.left = removeNode( node.left, key); //{ 4} 
+		return node; //{ 5} 
+		} else if (key > node.key){ //{ 6}
+		 node.right = removeNode( node.right, key); //{ 7} 
+		 return node; //{ 8} 
+		} else { 
+			// key is equal to node.key // case 1 - a leaf node 
+			if (node.left === null && node.right === null){ //{ 9} 
+				node = null; //{ 10} 
+				return node; //{ 11} 
+			}
+		 // case 2 - a node with only 1 child 
+			if (node.left === null){ //{ 12} 
+				node = node.right; //{ 13} 
+				return node; //{ 14} 
+			} 
+			else if (node.right === null){ //{ 15}
+				 node = node.left; //{ 16} 
+				 return node; //{ 17} 
+			} // case 3 - a node with 2 children 
+			var aux = findMinNode( node.right); //{ 18} 
+			node.key = aux.key; //{ 19} 
+			node.right = removeNode(node.right, aux.key); //{ 20}
+			return node; //{ 21} 
+		
+		}
+	};
+	
+	this.insert =function(key){
+		var newNode = new Node(key);
+		if(root==null){
+			root = newNode;
+		}else{
+			insertNode(root, newNode);
+		}
+	};
+	this.search=function(key){
+		return searchNode(root, key);
+	};
+	this.inOrderTraverse = function(callback){
+		inOrderTraverse(root, callback);
+	};
+	this.preOrderTraverse = function(callback){
+		preOrderTraverse(root, callback);
+	};
+	this.postOrderTraverse = function(callback){
+		postOrderTraverse(root, callback);
+	};
+	this. min = function(){
+		return minNode(root);
+	};
+	this.max=function(){
+		return maxNode(root);
+	};
+	
+	this.remove=function(key){
+		root = removeNode(root,key);
+		
+	};
+}
+ var tree = new BinarySearchTree();
+ tree.insert(11);
+ tree.insert(7);
+ tree.insert(15);
+ tree.insert(5);
+ tree.insert(3);
+ tree.insert(9);
+ tree.insert(8);
+ tree.insert(10);
+ tree.insert(13);
+ tree.insert(12);
+ tree.insert(14);
+ tree.insert(20);
+ tree.insert(18);
+ tree.insert(25);
+ tree.insert(14);
+
+  function printNode(value){
+  	console.log(value);
+  }
+ 
+  tree.remove(25);
+ //	tree.postOrderTraverse(printNode);
+ // console.log( tree.search( 1) ? 'Key 1 found.' : 'Key 1 not found.'); 
+ // console.log( tree.search( 11) ? 'Key 8 found.' : 'Key 8 not found.');;
+	//console.log(tree.search(25))
+	
+	
+function Graph(){
+	var vertices =[];
+	var adjList = new Dictionary();
+	
+	var initializeColor = function(){
+		var color=[];
+		for(var i=0; i<vertices.length; i++)
+		{
+			color[vertices[i]]='white';	
+		}
+		return color;
+	};
+		this.bfs = function(v, callback){
+		var color = initializeColor(),
+			queue = new Queue();
+			d=[],
+			pred=[],
+		queue.enqueue(v);
+		for(var i=0; i<vertices.length; i++){
+			d[vertices[i]]=0;
+			pred[vertices[i]]=null;
+		}
+		while (! queue.isEmpty()){ 
+			//{ 5} 
+			var u = queue.dequeue(), 
+			//{ 6} 
+			neighbors = adjList.get(u); 
+			//{ 7} 
+			color[ u] = 'grey'; 
+			//{ 8} 
+			for (var i = 0; i < neighbors.length; i++){ 
+				//{ 9} 
+				var w = neighbors[ i]; //{ 10} 
+				if (color[w] === 'white'){
+					 //{ 11} 
+					 color[w] = 'grey'; 
+					 d[w]=d[u]+1;
+					 pred[w]=u;
+					 //{ 12} 
+					 queue.enqueue(w); 
+					 //{ 13} 
+					 } 
+				} 
+				color[ u] = 'black'; 
+				//{ 14} 
+				if (callback) { 
+					//{ 15} 
+					callback( u); 
+					} 
+				} 
+				return {
+					distances: d,
+					predecessors:pred
+				};
+			};
+	var time=0;		
+	this.dfs = function(){
+		 var color = initializeColor(), //{ 2}
+		  d = [], f = [], p = []; 
+		  time = 0; 
+		  for (var i = 0; i < vertices.length; i++){ //{ 3} 
+		  	f[ vertices[ i]] = 0; 
+		  	d[ vertices[ i]] = 0; 
+		  	p[ vertices[ i]] = null; 
+		  	} 
+		  	for (i = 0; i < vertices.length; i++){ 
+		  		if (color[ vertices[ i]] === 'white'){
+		  			 dfsVisit( vertices[ i], color, d, f, p);
+		  			  } 
+		  			  } 
+		  			  return { //{ 4} 
+		  			  discovery: d, finished: f, predecessors: p 
+		  			  }; 
+		  		 };
+
+	var dfsVisit = function( u, color, d, f, p){ 
+		console.log(' discovered ' + u); 
+		color[ u] = 'grey'; 
+		d[ u] = + + time; //{ 5} 
+		var neighbors = adjList.get( u); 
+		for (var i = 0; i < neighbors.length; i++){ 
+			var w = neighbors[ i]; 
+			if (color[ w] === 'white'){ 
+				p[ w] = u; //{ 6} 
+				dfsVisit( w, color, d, f, p); } 
+				} 
+				color[ u] = 'black'; 
+				f[ u] = + + time; //{ 7} 
+				console.log(' explored ' + u); 
+		};
+
+	this.addVertex = function(v){
+		vertices.push(v);
+		adjList.set(v, []);
+		
+	};
+	this.addEdge = function(v, w){
+		adjList.get(v).push(w);
+		adjList.get(w).push(v);
+		
+	};
+	this.toString = function(){ 
+	var s = ''; 
+	for (var i = 0; i < vertices.length; i++){ 
+		//{ 10} 
+		s+= vertices[i] + ' -> '; 
+		var neighbors = adjList.get(vertices[i]); 
+		//{ 11} 
+		for (var j = 0; j < neighbors.length; j++){ 
+			//{ 12} 
+			s += neighbors[j] + ' ';
+			 }
+			  s+= '\n'; 
+			  //{ 13} } 
+			 
+			 };
+			  return s; 
+		};
+
+};
+
+var graph = new Graph();
+var myVertices = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+
+for(var i = 0; i < myVertices.length; i ++){ 
+	//{ 8} 
+	graph.addVertex(myVertices[i]); 
+}
+
+graph.addEdge('A','B');
+graph.addEdge('A','C');
+graph.addEdge('A','D');
+graph.addEdge('C','D');
+graph.addEdge('C','G');
+graph.addEdge('D','G');
+graph.addEdge('D','H');
+graph.addEdge('B','E');
+graph.addEdge('B','F');
+graph.addEdge('E','I');
+console.log(graph.toString());
+function printNode( value){ 
+	//{ 16} 
+	console.log(' Visited vertex: ' + value); 
+	//{ 17} 
+	}
+ graph.bfs( myVertices[ 0], printNode); //{ 18}
+
+var shortestPathA = graph.bfs(myVertices[0]); 
+console.log(shortestPathA);
+
+var fromVertex = myVertices[0];
+for (var i = 1; i < myVertices.length; i++){ //{ 10} 
+	var toVertex = myVertices[i], 
+//{ 11} 
+	path = new Stack(); 
+//{ 12} 
+	for (var v = toVertex; v!== fromVertex; v = shortestPathA.predecessors[v]) 
+	{ //{ 13} 
+	path.push( v); //{ 14} 
+	} 
+path.push( fromVertex); //{ 15} 
+var s = path.pop(); //{ 16} 
+while (! path.isEmpty()){ //{ 17} 
+s += ' - ' + path.pop(); //{ 18} 
+} 
+console.log( s); //{ 19} 
+}
+graph.dfs(printNode);
+
+////////////////Sorting////////////////////
+function ArrayList(){
+	var array = [];
+	this.insert = function(item){
+		array.push(item);
+	};
+	this.toString = function()
+	{
+		return array.join();
+	};
+	
+	///////////Sorting//////////////
+	this.bubbleSort = function(){
+		var length =array.length;
+		for(var i=0; i<length; i++){
+			for(var j=0; j<length-1; j++){
+				if(array[j]>array[j+1]){
+					swap(j, j+1);
+				}
+			}
+		}	
+	};
+	this.betterBubbleSort = function(){
+		var length =array.length;
+		for(var i=0; i<length; i++){
+			for(var j=0; j<length-1-i; j++){
+				if(array[j]>array[j+1]){
+					swap(j, j+1);
+				}
+			}
+		}	
+	};
+	this.selectionSort = function(){
+		var length =array.length,
+			indexMin;
+		for(var i=0; i<length-1; i++){
+			indexMin = i;
+			for(var j=i; j<length; j++){
+				if(array[indexMin>array[j]]){
+					indexMin = j;
+				}
+			}
+			if(i!==indexMin){
+				swap(i, indexMin);
+			}
+		}	
+	};
+	this.insertionSort = function(){
+		var length = array.length, 
+			j, 
+			temp;
+			for(var i=1; i<length; i++){
+				j=i;
+				temp = array[i];
+				while(j>0 &&array[j-1]>temp){
+					array[j]=array[j-1];
+					j--;
+				}
+				array[j]=temp;
+			}
+	};
+	this.mergeSort = function(){
+		array = mergeSortRec(array);
+	};
+	this.quickSort = function(){
+		quick(array, 0, array.length-1);
+	};
+	
+	/////////////Searching///////////////
+	this.sequentialSearch = function(item){
+		for(var i=0; i<array.length; i++){
+			if(item == array[i]){
+				return i;
+			}
+		}
+		return -1;
+	};
+	this.binarySearch = function(item){
+		console.log(typeof(item))
+		if(typeof(item)==='number'){
+			
+			this.quickSort();
+			var low=0,
+				high=array.length-1,
+				mid, element;
+				while(low<=high){
+					mid = Math.floor((low+high)/2);
+					element = array[mid];
+					if(element<item){
+						low = mid+1;
+					}else if(element>item){
+						high = mid-1;
+					}
+					else{
+						return mid;
+					}
+				}
+			}else{
+				var arr=this.toString().split(',');
+				var low=0,
+				high=arr.length-1,
+				mid, element;
+				while(low<=high){
+				return arr.indexOf(item);
+				}
+			}
+		return -1;
+	};
+	
+	
+	Array.prototype.binarySearch = function(item)
+	{
+		
+		if(typeof(item)==='number'){
+			
+			this.sort()
+			var low=0,
+				high=array.length-1,
+				mid, element;
+				while(low<=high){
+					mid = Math.floor((low+high)/2);
+					element = array[mid];
+					if(element<item){
+						low = mid+1;
+					}else if(element>item){
+						high = mid-1;
+					}
+					else{
+						return mid;
+					}
+				}
+			}else{
+				var arr=this.toString().split(',');
+				var low=0,
+				high=arr.length-1,
+				mid, element;
+				while(low<=high){
+				return arr.indexOf(item);
+				}
+			}
+		return -1;
+	};
+	
+	var swap = function(index1, index2){
+		var aux = array[index1];
+		array[index1]= array[index2];
+		array[index2]=aux;
+	};
+	var mergeSortRec = function(array){
+		var length = array.length;
+		if(length===1){
+			return array;
+		}
+		var mid = Math.floor(length/2),
+			left = array.slice(0, mid),
+			right = array.slice(mid, length);
+		return merge(mergeSortRec(left), mergeSortRec(right));
+	};
+	var merge = function(left, right){
+		var result =[],
+			il = 0,
+			ir=0;
+			while(il<left.length && ir<right.length){
+				if(left[i]<right[ir]){
+					result.push(left[i]++);
+				}
+				else{
+					result.push(right[ir++]);
+				}
+			}
+			while(il<left.length){
+				result.push(left[il++]);
+			}
+			while(ir<right.length){
+				result.push(right[ir++]);
+			}
+		return result;	
+	};
+	var quick = function(array, left, right){
+		var index;
+		if(array.length>1){	
+		index = partition(array, left, right);
+		}
+		if(left<index-1){
+			quick(array, left, index-1);
+		}
+		if(index<right){
+			quick(array, index, right);
+		}
+	};
+	var partition = function(array, left, right){
+		var pivot = array[Math.floor((right+left)/2)],
+		i=left,
+		j=right;
+		while(i<=j){
+			while(array[i]<pivot){
+				i++
+			}
+			while(array[j]>pivot){
+				j--
+			}
+			if(i<=j){
+				swapQuickSort(array, i, j);
+				i++;
+				j--
+			}
+		}
+		return i;
+	};
+	var swapQuickSort = function(array, index1, index2){
+		var aux = array[index1];
+		array[index1] = array[index2];
+		array[index2]=aux;
+	};
+};
+
+function createNonSortedArray(size){
+	var array = new ArrayList();
+	for (var i=size; i>0; i--){
+		array.insert(i);
+	}	
+	return array;
+}
+var arrayStrings = new ArrayList();
+arrayStrings.insert('suzie');
+arrayStrings.insert('elvis');
+arrayStrings.insert('rob');
+var realArr = ['suzie', 'rob', 'elvis']
+var array = createNonSortedArray(5);
+var array2 = array;
+var array3 = array;
+var array4 =array;
+var array5 = array;
+var array6 = array;
+console.log(arrayStrings);
+console.log(array)
+
+console.log(array.toString());
+array.bubbleSort();
+array2.betterBubbleSort();
+array3.selectionSort();
+array4.insertionSort();
+array5.mergeSort();
+array6.quickSort();
+
+console.log(array.toString());
+console.log(array2.toString());
+console.log(array3.toString());
+console.log(array4.toString());
+console.log(array5.toString());
+console.log(array6.toString());
+console.log('sequential search index= '+arrayStrings.sequentialSearch('elvis'));
+console.log(arrayStrings.toString())
+console.log('binary search index= '+arrayStrings.binarySearch('rob'));
+console.log(realArr.binarySearch(realArr.indexOf('elvis')));
+</script>
+
+</body>
+	
+</html>

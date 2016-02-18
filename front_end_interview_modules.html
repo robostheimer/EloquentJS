@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html>
+	
+	<body>
+		<script src="/Sidewire/js/prototypes.js"></script>
+		<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+		<script>
+		
+		
+		
+		
+			var app = app || {};
+			
+			
+			//////Modules allow for abstraction//////////
+			////////loads external data into the mOdules
+			//////////Add promises so that variables can be made throughout a chain////////////
+			app.loadData =(function(){
+					_loadGeo =function(url){
+						return new Promise(function(resolve, reject) {
+							$.getJSON(url).success(function(data){
+								app.songs=data.rows;
+								resolve(data.rows);
+							});
+						});
+					};	
+					_loadSongs= function(url)
+					{
+						return new Promise(function(resolve, reject) {
+							$.getJSON(url).success(function(data){
+								app.songs=data.response.songs;
+								resolve(data.response.songs);
+							});
+						});
+					};
+					_loadArtists=function(url)
+					{
+						
+						return new Promise(function(resolve, reject) {
+							console.log('loading artists')
+							$.getJSON(url).success(function(data){
+									app.artists=data.response.artists
+									resolve(data.response.artists);
+							});
+						});	
+					};
+				
+				return{
+					loadGeo:function(url)
+					{
+						return new Promise(function(resolve, reject) {
+						_loadGeo(url);
+							
+							if(typeof(_loadGeo)=='function'){
+								
+								resolve(_loadGeo(url));
+							}
+							else{
+								console.log('no load')
+							}
+						});						},
+					loadSongs: function(url)
+					{
+						return new Promise(function(resolve, reject) {
+						_loadSongs(url);
+							
+							if(typeof(_loadSongs)=='function'){
+								
+								resolve(_loadSongs(url));
+							}
+							else{
+								console.log('no load')
+							}
+						});	
+						
+					},
+					loadArtists: function(url)
+					{
+						return new Promise(function(resolve, reject) {
+						_loadArtists(url);
+							
+							if(typeof(_loadArtists)=='function'){
+								
+								resolve(_loadArtists(url));
+							}
+							else{
+								console.log('no load')
+							}
+						});	
+					},
+							
+				};
+			}());
+			
+			////////////Average piece of app Module above
+			app.findMean = (function(){
+				function _average()
+				{
+					var args = Array.prototype.slice.call(arguments);
+					app.avg=Number();
+					args.forEach(function(item){
+						app.avg = app.avg+item;
+					});
+					app.avg = app.avg/args.length;
+					return app.avg
+					
+				}
+				return{
+					////////////functions expects comma delimited list of numbers, but this cose makes it flexible enough to accept arrays
+					average:function(numbers){
+						//////Checks to see if it is an array////////
+						///////if it is it runs the Array.prototype.slice method on the numbers array
+						
+						if(typeof(numbers)=='object')
+						{
+							var args = Array.prototype.slice.call(numbers);
+							return new Promise(function(resolve, reject) {
+								
+							///////////calls to the Array prototype to turn the numbers array arguments object into an actual array
+							
+							
+							resolve(_average.apply(null, args));
+							});
+						}
+						else{
+							///////if it is a simple list of numbers, it runs the Array.prototype on the arguments object (each function object has an argument object attached to it)
+							///////////calls to the Array prototype to turn the arguments object into an actual array
+							console.log(arguments);
+							var args = Array.prototype.slice.call(arguments);
+							return new Promise(function(resolve, reject) {
+
+								//uses variable-arity of apply method
+								resolve(_average.apply(null, args));
+							});
+						}
+					}
+				};
+					
+			}());
+			//////////////calling modules via deferred promises//////////////////
+			app.loadData.loadGeo('https://www.googleapis.com/fusiontables/v1/query?sql=SELECT+CityName%2C+Region%2C+CountryID+FROM+1B8NpmfiAc414JhWeVZcSqiz4coLc_OeIh7umUDGs+WHERE+Lat+%3C=38.935201799999994+AND+Lat%3E=38.8352018+AND+Long%3C=-76.9316695+AND+Long%3E=-77.03166949999999&key=AIzaSyBBcCEirvYGEa2QoGas7w2uaWQweDF2pi0').then(function(data){
+				console.log('geo', data);
+					var geo =data;
+					app.loadData.loadSongs('http://developer.echonest.com/api/v4/song/search?api_key=MIV6XZXYU7FNSMMDN&format=json&results=1&&artist=Marvin%20Gaye&bucket=artist_location').then(function(data){
+					console.log('songs', data);
+					var songs=data;
+						 app.loadData.loadArtists('http://developer.echonest.com/api/v4/artist/similar?api_key=3KFREGLKBDFLWSIEC&format=json&name=Bad%20Brains&results=10&&bucket=id:spotify-WW&bucket=images&bucket=artist_location').then(function(data){
+					 	console.log('artists', data);
+					 	var artists=data;
+					 	app.findMean.average(geo.length, songs.length, artists.length).then(function(data){
+					 		
+							var avg=data;
+							console.log(avg);
+						});	
+					 	
+					 });
+				});
+				
+			});
+			
+			
+		
+	var nba = {
+		champion:function(str)
+		{
+			
+			return str;	
+		},
+		mvp: function(str)
+		{
+			str=str+', you are going to Disney World!';
+			return str;	
+		},
+		x:0
+	};
+	
+	var y={
+		x:1
+	};
+	
+	var champion = function()
+	{
+		return(this.champion('Warriors')+' sings we are the champions')+' & '+(this.mvp('andre Igoudala'));
+	};
+	var champion_too = function(){
+		alert(this.x);
+	}
+	
+	//////////binds a function located on the left side of the '.' to all the functions/variables on the right side of the dot;
+	//////////creates a new function; to get it to return have to call the variable with accompanying '()'
+	var nba2015 = champion.bind(nba)
+	var nba2015_2=champion_too.bind(y);
+	/////////call takes a string
+	////////runs the function called and returns result; hence no need to call the function as yo uwould with bind to get results
+	var nba2015_ = nba.mvp.call(champion, 'Steph Curry');
+	//////////apply takes an array
+	////////runs the function called and returns result; hence no need to call the function as yo uwould with bind to get results
+	var nba2015__=nba.mvp.apply(champion, ['Draymond Green'])	
+	console.log(nba2015());
+	console.log(nba2015_);
+	console.log(nba2015__);	
+	console.log(nba2015_2())	
+			
+			
+	var obj = {
+		saySomething:function(){
+			console.log('I am talking');
+		}
+	};
+	
+	function letsTalk()	{
+		console.log(this.saySomething());
+	}	
+	var test = letsTalk.bind(obj);
+	console.log(test())	;
+	////////////Curry////////////
+	function helloParent(sex, name){
+		if(sex=="female")
+		{
+			console.log("Hello, Mom.  Your name is "+name);
+		}
+		else
+		{
+			console.log("Hello, Dad. Your name is "+name);
+		}
+	}	
+	
+	var greeter = helloParent.bind(null, 'male');
+	console.log(greeter('Jim'));
+	
+	var math =math||{};
+	
+	math.MathMe=(function(){
+		_add=function(arr){
+			console.log(arr)
+			var sum = 0;
+			
+			for(var x=0; x<arr.length; x++)
+			{
+				sum = sum+parseInt(arr[x]);
+				
+			}
+			console.log(sum)
+			return sum;
+		};
+	
+		_subtract=function(arr){
+			
+			var difference=arr[0];
+			for(var x=1; x<arr.length; x++)
+			{
+				difference = difference-arr[x];
+				
+			}
+			console.log(difference)
+			return difference;
+		};
+		
+		return {
+			add:function(){
+				var args=Array.prototype.slice.call(arguments);
+				_add(args)
+				},
+			subtract:function(){
+				var args=Array.prototype.slice.call(arguments);
+				_subtract(args)
+				}
+		}	;
+	}());
+	
+math.MathMe.add(2, 5, 8);
+math.MathMe.subtract(10, 3, 2);
+math.MathMe.add.apply(null,[1, 2, 5]);
+	
+	
+	
+	
+			
+				</script>	
+	</body>
+	
+	
+</html>

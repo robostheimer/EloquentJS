@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app id="ng-app">
+
+	<head>
+		<style>
+		*{
+			box-sizing:border-box;
+		 }
+			main{
+				max-width:600px; 
+				margin: 0 auto; 
+				border:1px solid red;
+				}
+			.simple{
+				width:500px; 
+				margin:20px auto;
+				border:1px solid red;
+				
+				}
+			.fancy{
+				width:500px; 
+				margin:20px auto;
+				padding:50px;
+				border:10px solid red;
+				
+			}	
+			.relative {
+			  position: relative;
+			  width: 600px;
+			  height: 400px;
+			  border:1px solid green;
+			  top:0px;
+			  left:10px;
+			}
+			.absolute {
+			  position: absolute;
+			  top: 120px;
+			  right: 0;
+			  width: 300px;
+			  height: 200px;
+			  border:1px solid red;
+			}
+			
+			.relativetoo{
+				position:relative;
+				top:60px;
+				left:30px;
+				border:1px solid blue;
+				width:700px;
+			}
+			.container {
+			  position: relative;
+			}
+			nav {
+			  position: absolute;
+			  left: 0px;
+			  width: 200px;
+			}
+			section {
+			  /* position is static by default */
+			  margin-left: 200px;
+			}
+			footer {
+			  position: fixed;
+			  bottom: 0;
+			  left: 0;
+			  height: 70px;
+			  background-color: white;
+			  width: 100%;
+			}
+			body {
+			  margin-bottom: 120px;
+			}
+			.float{
+				
+				border:1px solid red;
+				position:relative;
+			}
+			img{float:right}
+			.clearfix{
+				overflow:auto;
+			}
+			
+			.box2 {
+			  display: inline-block;
+			  width: 200px;
+			  height: 100px;
+			  margin: 1em;
+			  border: 1px dotted green;
+			}
+			
+			nav {
+			  display: inline-block;
+			  vertical-align: top;
+			  width: 25%;
+			  border:1px solid orange;
+			}
+			.column {
+			  display: inline-block;
+			  vertical-align: top;
+			  width: 75%;
+			  border:1px solid gray;
+			}
+			.columns {
+			  padding: 1em;
+			  -moz-column-count: 5
+			  -moz-column-gap: 1em;
+			  -webkit-column-count: 5;
+			  -webkit-column-gap: 1em;
+			  column-count: 5;
+			  column-gap: 1em;
+			  border:1px solid purple;
+			}
+			.columns div{
+				border-right:1px solid blue;
+				padding:5px;
+			}
+			.vertical-container {
+				  height: 300px;
+				  display: -webkit-flex;
+				  display:        flex;
+				  -webkit-align-items: center;
+				          align-items: center;
+				  -webkit-justify-content: center;
+				          justify-content: center;
+				   border:1px solid red;       
+				}
+			.vertical-container div{
+				border:1px solid blue;
+			}	
+			
+			.div1{position:relative; width:200px; height:200px;border:1px solid blue}
+			.div2{position:absolute; top:25px; left:25px; width:75px; height:75px; border:1px solid red}
+			.box{display:inline-block; width:50px; height:50px; border:1px solid green; box-sizing:border-box; margin:20px;}
+			
+			.flex-container {
+		    display: -webkit-flex;
+		    display: flex;
+		    -webkit-justify-content: space-around;
+		    justify-content: space-around;
+		    height: 400px;
+		    width:300px;
+		    flex-wrap:wrap;
+		    -webkit-flex-wrap:wrap;
+		    background-color: Silver;
+		  /* -webkit-align-items:center;
+		    align-items:center;  */
+		    /*align-content:center;
+		    -webkit-align-content:center;*/
+		    -webkit-flex-flow: column nowrap;
+		      flex-flow: column nowrap;
+		
+		}
+		
+		.flex-item {
+		    background-color: DeepSkyBlue;
+		    width: 100px;
+		    height: 100px;
+		    margin: 10px;
+		    /*margin:auto;*/
+		    padding:5px;
+		    box-sizing:border-box;
+		}
+		
+					
+		</style>
+		<title>Let's do this x2</title>
+		
+	</head>
+	<body>
+		<main>
+			<p>Using max-width instead of width in this situation will improve the browser's handling of small windows. This is important when making a site usable on mobile. Resize this page to check it out!</p>
+<p>
+By the way, max-width is supported by all major browsers including IE7+ so you shouldn't be afraid of using it.</p>
+		</main>
+		
+		<section class="simple">
+			Simply the Best
+		</section>
+		<section class="fancy">
+			Hey there fancy pants
+		</section>
+		<!--absolute vs relative<section class="relativetoo">
+			Relativetoo
+			<section class="relative">
+				Relative
+				<section class="absolute">
+					Absolute
+				</section>
+			</section>
+		</section>-->
+		<!--using postionsdiv class="container">
+			<nav>
+				<ul>
+					<li>Test1</li>
+					<li>Test2</li>
+					<li>Test3</li>
+				</ul>
+			</nav>
+			<section>The margin-left style for sections makes sure there is room for the nav. Otherwise the absolute and static elements would overlap
+
+</section>
+<section>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Mauris ante ligula, facilisis sed ornare eu, lobortis in odio. Praesent convallis urna a lacus interdum ut hendrerit risus congue. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta. Cras ac leo purus. Mauris quis diam velit.
+
+</section>
+<section>
+Notice what happens when you resize your browser. It works nicely!</section>
+			<footer>If you use a fixed header or footer, make sure there is room for it! I put a margin-bottom on the body.</footer>-->
+		
+		
+<!--Clearfix<div class="float clearfix"><img src="https://mail.google.com/mail/u/0?ui=2&ik=897fa93239&attid=0.1&th=14ddebdb5d320ebc&view=fimg&realattid=ii_iar35aya1_14ddeb716079b5cd&disp=thd&attbid=ANGjdJ-lH1WQpW3q-VI0OGFumNqAp5L9Sz2Lf9D4EyLCv3dihPaTO_9ZRP0fojfzv_bp2H5658WHLpCftn11I1POerJRqCtA_SOHZZM5Otg_R48Hxo488T4FAVojzsM&ats=2524608000000&sz=w2560-h1528" width="100" height="300"/>	<p>Test</p><p>Test Test Test</p>	
+</div>-->
+	<!--inline block	<div class="box2"></div>
+		<div class="box2"></div>
+		<div class="box2"></div>
+		<div class="box2"></div>
+		<div class="box2"></div>
+		<div class="box2"></div>
+		<div class="box2"></div>		-->
+	<!--trad layout with inline-block
+		<div class="container elem">
+ 
+
+  <nav class="elem elem-red">
+   
+    <ul>
+      <li>
+        <a href="inline-block-layout.html">Home</a>
+      </li>
+      <li>
+        <a href="inline-block-layout.html">Taco Menu</a>
+      </li>
+      <li>
+        <a href="inline-block-layout.html">Draft List</a>
+      </li>
+      <li>
+        <a href="inline-block-layout.html">Hours</a>
+      </li>
+      <li>
+        <a href="inline-block-layout.html">Directions</a>
+      </li>
+      <li>
+        <a href="inline-block-layout.html">Contact</a>
+      </li>
+    </ul>
+    
+  </nav><div class="elem elem-red column">
+   
+    <section class="elem elem-green">
+    
+      <p>
+        Tada!
+      </p>
+     
+    </section>
+
+    <section class="elem elem-green ipsum">
+    
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Mauris ante ligula, facilisis sed ornare eu, lobortis in odio. Praesent convallis urna a lacus interdum ut hendrerit risus congue. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta. Cras ac leo purus. Mauris quis diam velit.
+      </p>
+      </section>
+
+  </div>
+
+</div>
+		</div>-->
+		
+<!--columns-->
+<div class="columns">
+	<div>TEst</div>
+	<div>Test</div>
+	<div>Test</div>
+	<div>Test</div>
+	<div>Test</div>
+</div>		
+<!--Flexbox - vertical centering-->	
+
+<div class="vertical-container">
+	<div> Test</div>
+</div>	
+
+<div class="div1">
+	<div class="div2"></div>
+</div>
+
+<div class="box"></div>
+<div class="box"></div>
+<div class="box"></div>
+
+
+<div class="flex-container">
+<div class="flex-item item1">flex item 1</div>
+<div class="flex-item item2">flex item 2</div>
+    <div class="flex-item item3">flex item 3</div>
+    
+    <div class="flex-item item4">flex item 4</div>
+    <div class="flex-item item5">flex item 5</div>
+</div>
+
+	</body>
+</html>
